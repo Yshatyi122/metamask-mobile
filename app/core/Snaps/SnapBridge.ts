@@ -15,7 +15,7 @@ import Engine from '../Engine';
 import { setupMultiplex } from '../../util/streams';
 import Logger from '../../util/Logger';
 import { getAllNetworks } from '../../util/networks';
-import { createSnapMethodMiddleware } from './createSnapMethodMiddleware';
+import { createSnapsMethodMiddleware } from '@metamask/rpc-methods';
 
 const ObjectMultiplex = require('obj-multiplex');
 const createFilterMiddleware = require('eth-json-rpc-filters');
@@ -143,11 +143,7 @@ export default class SnapBridge {
     const { PermissionController } = context;
 
     engine.push(
-      createSnapMethodMiddleware(true, {
-        // getAppKey: async () =>
-        //   new Promise((resolve, reject) => {
-        //     resolve('mockAppKey');
-        //   }),
+      createSnapsMethodMiddleware(true, {
         // getUnlockPromise: () => Promise.resolve(),
 
         getSnaps: controllerMessenger.call.bind(
@@ -169,7 +165,6 @@ export default class SnapBridge {
           PermissionController,
           this.snapId,
         ),
-        // getAccounts: (origin) => getPermittedAccounts(origin),
         installSnaps: controllerMessenger.call.bind(
           controllerMessenger,
           'SnapController:install',

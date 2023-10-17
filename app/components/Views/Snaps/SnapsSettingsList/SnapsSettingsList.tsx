@@ -61,10 +61,9 @@ const SnapsSettingsList = () => {
     const { SnapController } = Engine.context as any;
     let message: string;
     try {
-      const result = await SnapController.processRequestedSnap(
+      const result = await SnapController.installSnaps(
         origin,
-        snapId,
-        '',
+        { [snapId]: {} },
       );
       if (result.error) {
         message = installFailedMsg(snapId, result.error);

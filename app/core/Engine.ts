@@ -27,7 +27,7 @@ import { GasFeeController } from '@metamask/gas-fee-controller';
 import { ApprovalController } from '@metamask/approval-controller';
 import { PermissionController } from '@metamask/permission-controller';
 import SwapsController, { swapsUtils } from '@metamask/swaps-controller';
-import { SnapController } from '@metamask/snaps-controllers';
+import { SnapController, buildSnapEndowmentSpecifications, buildSnapRestrictedMethodSpecifications } from '@metamask/snaps-controllers';
 import { SubjectMetadataController } from '@metamask/subject-metadata-controller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MetaMaskKeyring as QRHardwareKeyring } from '@keystonehq/metamask-airgapped-keyring';
@@ -53,10 +53,10 @@ import { isZero } from '../util/lodash';
 import { MetaMetricsEvents } from './Analytics';
 import AnalyticsV2 from '../util/analyticsV2';
 import {
+  ExcludedSnapEndowments,
+  ExcludedSnapPermissions,
   SnapBridge,
   WebviewExecutionService,
-  buildSnapEndowmentSpecifications,
-  buildSnapRestrictedMethodSpecifications,
   detectSnapLocation,
   fetchFunction,
 } from './Snaps';
@@ -302,24 +302,11 @@ class Engine {
         return state === 'active';
       };
 
-      const getAppKeyForSubject = async (subject, requestedAccount) => {
-        let account;
-
-        if (requestedAccount) {
-          account = requestedAccount;
-        } else {
-          [account] = await keyringController.getAccounts();
-        }
-        const appKey = await keyringController.exportAppKeyForAddress(
-          account,
-          subject,
-        );
-        return appKey;
-      };
-
       const getSnapPermissionSpecifications = () => ({
-        ...buildSnapEndowmentSpecifications(),
-        ...buildSnapRestrictedMethodSpecifications({
+        ...buildSnapEndowmentSpecifications(ExcludedSnapEndowments),
+        ...buildSnapRestrictedMethodSpecifications(ExcludedSnapPermissions, {
+          encrypt: encryptor.encrypt.bind(encryptor),
+          decrypt: encryptor.decrypt.bind(encryptor),
           clearSnapState: this.controllerMessenger.call.bind(
             this.controllerMessenger,
             'SnapController:clearSnapState',
@@ -342,12 +329,6 @@ class Engine {
             this.controllerMessenger,
             'SnapController:updateSnapState',
           ),
-          showConfirmation: (origin, confirmationData) =>
-            approvalController.addAndShowApprovalRequest({
-              origin,
-              type: 'snapConfirmation',
-              requestData: confirmationData,
-            }),
           showDialog: (origin, type, content, placeholder) =>
             approvalController.addAndShowApprovalRequest({
               origin,
@@ -448,9 +429,10 @@ class Engine {
           'ExecutionService:unhandledError',
           'ExecutionService:outboundRequest',
           'ExecutionService:outboundResponse',
+          'SnapController:snapInstalled',
+          'SnapController:snapUpdated',
         ],
         allowedActions: [
-          `${approvalController.name}:addRequest`,
           `${permissionController.name}:getEndowments`,
           `${permissionController.name}:getPermissions`,
           `${permissionController.name}:hasPermission`,
@@ -459,6 +441,10 @@ class Engine {
           `${permissionController.name}:revokeAllPermissions`,
           `${permissionController.name}:revokePermissions`,
           `${permissionController.name}:revokePermissionForAllSubjects`,
+          `${permissionController.name}:getSubjectNames`,
+          `${permissionController.name}:updateCaveat`,
+          `${approvalController.name}:addRequest`,
+          `${approvalController.name}:updateRequestState`,
           `${permissionController.name}:grantPermissions`,
           `${subjectMetadataController.name}:getSubjectMetadata`,
           'ExecutionService:executeSnap',
@@ -473,8 +459,6 @@ class Engine {
         environmentEndowmentPermissions: Object.values(EndowmentPermissions),
         featureFlags: { dappsCanUpdateSnaps: true },
         // TO DO
-        getAppKey: async (subject, appKeyType) =>
-          getAppKeyForSubject(`${appKeyType}:${subject}`),
         checkBlockList: async (snapsToCheck) =>
           checkSnapsBlockList(snapsToCheck, SNAP_BLOCKLIST),
         state: initialState.SnapController || {},
