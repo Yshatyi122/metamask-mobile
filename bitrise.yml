@@ -96,10 +96,10 @@ stages:
     workflows:
       - ios_e2e_test:
           envs:
-             - TEST_TAG: Regression
+             - TEST_TAG: Smoke
       - android_e2e_test:
           envs:
-             - TEST_TAG: Regression
+             - TEST_TAG: Smoke
   run_regression_e2e_ios_android_stage:
     workflows:
       - ios_e2e_test:
@@ -333,7 +333,7 @@ workflows:
             - content: |-
                 #!/usr/bin/env bash
                 node -v
-                IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:android:bitrise:debug --testNamePattern=$TEST_TAG
+                IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:android:bitrise:debug --testNamePattern="$TEST_TAG"
           title: Detox Build & Test
           is_always_run: false
       - custom-test-results-export@1:
@@ -397,7 +397,7 @@ workflows:
             - content: |-
                 #!/usr/bin/env bash
                 node -v
-                IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern=$TEST_TAG
+                IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$TEST_TAG"
           title: Detox Build & Test
           is_always_run: false
       - custom-test-results-export@1:
