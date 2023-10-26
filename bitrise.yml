@@ -370,6 +370,8 @@ workflows:
         stack: linux-docker-android-20.04
         machine_type_id: elite-xl
   ios_e2e_test:
+    envs:
+    - TEST_TAG2: $TEST_TAG
     # before_run:
     #   - code_setup_dev
     #   - e2e_setup
@@ -395,10 +397,10 @@ workflows:
       - script@1:
           inputs:
             - content: |-
+                echo "THIS IS OUR TAG $TEST_TAG2"
                 #!/usr/bin/env bash
                 node -v
                 # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$TEST_TAG"
-                echo "THIS IS OUR TAG: $TEST_TAG"
           title: Detox Build & Test
           is_always_run: false
       # - custom-test-results-export@1:
