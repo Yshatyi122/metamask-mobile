@@ -96,18 +96,26 @@ stages:
     workflows:
       - ios_e2e_test:
           envs:
-             - TEST_TAG: Smoke
+            - opts:
+                is_expand: false
+              TEST_TAG: Smoke
       - android_e2e_test:
           envs:
-             - TEST_TAG: Smoke
+            - opts:
+                is_expand: false
+              TEST_TAG: Smoke
   run_regression_e2e_ios_android_stage:
     workflows:
       - ios_e2e_test:
           envs:
-             - TEST_TAG: Regression 
+            - opts:
+                is_expand: false
+              TEST_TAG: Regression 
       - android_e2e_test:
           envs:
-            - TEST_TAG: Regression
+            - opts:
+                is_expand: false
+              TEST_TAG: Regression
           
   run_e2e_ios_android_stage:
     workflows:
