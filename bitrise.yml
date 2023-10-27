@@ -42,6 +42,7 @@ pipelines:
   # Run regression tests pipeline
   run_regression_e2e_pipeline:
     stages:
+      - random_stage: {} 
       - run_regression_e2e_ios_android_stage: {}
       - notify: {} 
 
@@ -102,9 +103,9 @@ stages:
           - TEST_TAG: Smoke
   run_regression_e2e_ios_android_stage:
     workflows:
-      - ios_e2e_test:
-          envs:
-           - TEST_TAG: Regression
+      - ios_e2e_test: {}
+          # envs:
+          #  - TEST_TAG: Regression
       # - android_e2e_test:
       #     envs:
       #      - TEST_TAG: Regression
@@ -121,6 +122,9 @@ stages:
   release_notify:
     workflows:
       - release_announcing_stores: {}
+  random_stage:
+    workflows:
+      - random_workflow: {}
 workflows:
   # Code Setups
   setup:
@@ -369,6 +373,19 @@ workflows:
       bitrise.io:
         stack: linux-docker-android-20.04
         machine_type_id: elite-xl
+  random_workflow:
+    steps:
+    - script@1:
+        title: Fetch pull request labels
+        inputs:
+          - content: |-
+              envman add --key TEST_TAG --value "true"
+    - share-pipeline-variable@1:
+        inputs:
+          - variables: TEST_TAG=$TEST_TAG
+
+
+
   ios_e2e_test:
     envs:
     - TEST_TAG2: $TEST_TAG
