@@ -39,24 +39,25 @@ pipelines:
       - run_e2e_android_stage: {} #runs android detox E2E
       - notify: {}
   
-  # Run regression tests pipeline
-  run_regression_e2e_pipeline:
-    stages:
-      - regression_tag_stage: {} 
-      - run_regression_e2e_ios_android_stage: {}
-      - notify: {} 
-
   #PR_e2e_verfication (build ios & android), run iOS (smoke), emulator Android
   release_e2e_pipeline:
     stages:
       - run_regression_e2e_ios_android_stage: {}
       - run_smoke_e2e_ios_android_stage: {}
       - notify: {}
-  #PR_e2e_verfication (build ios & android), run iOS (smoke), emulator Android
+  
+    # Run regression tests pipeline (build ios & android), run Android, iOS Regression tests
+  run_regression_e2e_pipeline:
+    stages:
+      - regression_tag_stage: {} 
+      - run_regression_e2e_ios_android_stage: {}
+      - notify: {} 
+  
+  #PR_e2e_verfication (build ios & android), run Android, iOS Smoke tests
   pr_smoke_e2e_pipeline:
     stages:
+      - smoke_tag_stage: {} 
       - run_smoke_e2e_ios_android_stage: {}
-      - smoke_tag_stage: {}
       - notify: {}
 
 #Stages refrence workflows. Those workflows cannot but utility "_this-is-a-utility"
@@ -376,20 +377,20 @@ workflows:
         title: Fetch tags
         inputs:
           - content: |-
-              envman add --key Smoke --value "true"
+              envman add --key SMOKE --value "true"
     - share-pipeline-variable@1:
         inputs:
-          - variables: Smoke=$Smoke
+          - variables: SMOKE_TAG=$SMOKE
   regression_tag_workflow: 
     steps:
     - script@1:
         title: Fetch tags
         inputs:
           - content: |-
-              envman add --key Regression --value "true" 
+              envman add --key REGRESSION --value "true" 
     - share-pipeline-variable@1:
         inputs:
-          - variables: Regression=$Regression
+          - variables: REGRESSION_TAG=$REGRESSION
   ios_e2e_test:
     envs:
     - TEST_TAG2: $TEST_TAG
@@ -418,11 +419,11 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR regression tag: $Regression"
-                echo "THIS IS OUR smoke: $Smoke"
+                echo "THIS IS OUR regression tag: $SMOKE_TAG"
+                # echo "THIS IS OUR smoke: $SMOKE_TAG"
                 #!/usr/bin/env bash
                 node -v
-                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$Smoke"
+                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$SMOKE_TAG"
           title: Detox Build & Test
           is_always_run: false
       # - custom-test-results-export@1:
@@ -861,7 +862,10 @@ app:
       IOS_APP_LINK: ''
     - opts:
         is_expand: false
-      TAGS: SMOKE
+      SMOKE: smoke
+    - opts:
+        is_expand: false
+      REGRESSION: Regression
 meta:
   bitrise.io:
     stack: osx-xcode-14.2.x-ventura
