@@ -42,7 +42,7 @@ pipelines:
   # Run regression tests pipeline
   run_regression_e2e_pipeline:
     stages:
-      - random_stage: {} 
+      - regression_tag_stage: {} 
       - run_regression_e2e_ios_android_stage: {}
       - notify: {} 
 
@@ -56,6 +56,7 @@ pipelines:
   pr_smoke_e2e_pipeline:
     stages:
       - run_smoke_e2e_ios_android_stage: {}
+      - smoke_tag_stage: {}
       - notify: {}
 
 #Stages refrence workflows. Those workflows cannot but utility "_this-is-a-utility"
@@ -95,20 +96,12 @@ stages:
       - ios_e2e_test: {}
   run_smoke_e2e_ios_android_stage:
     workflows:
-      - ios_e2e_test:
-          envs:
-          - TEST_TAG: "$TAG"
-      - android_e2e_test:
-          envs:
-          - TEST_TAG: Smoke
+      - ios_e2e_test: {}
+      - android_e2e_test: {}
   run_regression_e2e_ios_android_stage:
     workflows:
       - ios_e2e_test: {}
-          # envs:
-          #  - TEST_TAG: Regression
-      # - android_e2e_test:
-      #     envs:
-      #      - TEST_TAG: Regression
+      - android_e2e_test: {}
   run_e2e_ios_android_stage:
     workflows:
       - ios_e2e_test: {}
@@ -122,9 +115,13 @@ stages:
   release_notify:
     workflows:
       - release_announcing_stores: {}
-  random_stage:
+  ## Gets the tags: Regression, Smoke that we would like to use in the respective pipeline
+  smoke_tag_stage:
     workflows:
-      - random_workflow: {}
+      - smoke_tag_workflow: {}
+  regression_tag_stage:
+    workflows:
+     - regression_tag_workflow: {}
 workflows:
   # Code Setups
   setup:
@@ -373,19 +370,26 @@ workflows:
       bitrise.io:
         stack: linux-docker-android-20.04
         machine_type_id: elite-xl
-  random_workflow:
+  smoke_tag_workflow:
     steps:
     - script@1:
-        title: Fetch pull request labels
+        title: Fetch tags
         inputs:
           - content: |-
-              envman add --key TEST_TAG --value "true"
+              envman add --key Smoke --value "true"
     - share-pipeline-variable@1:
         inputs:
-          - variables: TEST_TAG=$TEST_TAG
-
-
-
+          - variables: SMOKE_TAG=$Smoke
+  regression_tag_workflow: 
+    steps:
+    - script@1:
+        title: Fetch tags
+        inputs:
+          - content: |-
+              envman add --key Regression --value "true" 
+    - share-pipeline-variable@1:
+        inputs:
+          - variables: REGRESSION_TAG=$Regression
   ios_e2e_test:
     envs:
     - TEST_TAG2: $TEST_TAG
@@ -414,11 +418,11 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR original TAG: $TAGS"
-                # echo "THIS IS OUR TAG2: $TEST_TAG"
+                echo "THIS IS OUR regression tag: $REGRESSION_TAG"
+                # echo "THIS IS OUR smoke: $SMOKE_TAG"
                 #!/usr/bin/env bash
                 node -v
-                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$TEST_TAG"
+                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$SMOKE_TAG"
           title: Detox Build & Test
           is_always_run: false
       # - custom-test-results-export@1:
