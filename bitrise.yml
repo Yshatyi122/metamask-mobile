@@ -379,7 +379,7 @@ workflows:
               envman add --key Smoke --value "true"
     - share-pipeline-variable@1:
         inputs:
-          - variables: SMOKE_TAG=$Smoke
+          - variables: Smoke=$Smoke
   regression_tag_workflow: 
     steps:
     - script@1:
@@ -389,7 +389,7 @@ workflows:
               envman add --key Regression --value "true" 
     - share-pipeline-variable@1:
         inputs:
-          - variables: REGRESSION_TAG=$Regression
+          - variables: Regression=$Regression
   ios_e2e_test:
     envs:
     - TEST_TAG2: $TEST_TAG
@@ -418,11 +418,11 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR regression tag: $SMOKE_TAG"
-                # echo "THIS IS OUR smoke: $SMOKE_TAG"
+                echo "THIS IS OUR regression tag: $Regression"
+                echo "THIS IS OUR smoke: $Smoke"
                 #!/usr/bin/env bash
                 node -v
-                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$SMOKE_TAG"
+                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$Smoke"
           title: Detox Build & Test
           is_always_run: false
       # - custom-test-results-export@1:
