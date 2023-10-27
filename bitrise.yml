@@ -372,7 +372,7 @@ workflows:
     envs:
     before_run:
       # - code_setup_dev
-      # - e2e_setup
+      - e2e_setup
     # after_run:
     #   - _notify_failure_on_slack
     steps:
