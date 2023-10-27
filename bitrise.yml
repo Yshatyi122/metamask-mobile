@@ -94,10 +94,10 @@ stages:
     workflows:
       - ios_e2e_test: {}
   run_regression_e2e_ios_android_stage:
-     steps:
+    steps:
       - script@1:
           inputs: 
-          ## Adding Regression env here
+          ## Adding Smoke env here
             - content: |-
                 #!/usr/bin/env bash
                 envman add --key REGRESSION --value regression
@@ -111,7 +111,7 @@ stages:
           ## Adding Smoke env here
             - content: |-
                 #!/usr/bin/env bash
-                envman add --key SMOKE --value smoke 
+                envman add --key SMOKE --value smoke
    workflows:
       - ios_e2e_test: {}
       - android_e2e_test: {}
