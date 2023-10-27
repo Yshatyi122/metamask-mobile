@@ -42,8 +42,6 @@ pipelines:
   #PR_e2e_verfication (build ios & android), run iOS (smoke), emulator Android
   release_e2e_pipeline:
     stages:
-      - regression_tag_stage: {} 
-      - smoke_tag_stage: {} 
       - run_regression_e2e_ios_android_stage: {}
       - run_smoke_e2e_ios_android_stage: {}
       - notify: {}
@@ -379,10 +377,10 @@ workflows:
         title: Fetch tags
         inputs:
           - content: |-
-              envman add --key SMOKE --value "true"
-    - share-pipeline-variable@1:
-        inputs:
-          - variables: SMOKE_TAG=$SMOKE
+              envman add --key SMOKE --value smoke
+    # - share-pipeline-variable@1:
+    #     inputs:
+    #       - variables: SMOKE_TAG=$SMOKE
   regression_tag_workflow: 
     steps:
     - script@1:
@@ -390,9 +388,9 @@ workflows:
         inputs:
           - content: |-
               envman add --key REGRESSION --value Regression
-    - share-pipeline-variable@1:
-        inputs:
-          - variables: REGRESSION_TAG=$REGRESSION
+    # - share-pipeline-variable@1:
+    #     inputs:
+    #       - variables: REGRESSION_TAG=$REGRESSION
   ios_e2e_test:
     envs:
     # before_run:
@@ -420,11 +418,11 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR regression tag: $REGRESSION_TAG"
-                # echo "THIS IS OUR smoke: $SMOKE_TAG"
+                echo "THIS IS OUR regression tag: $REGRESSION"
+                echo "THIS IS OUR smoke: $SMOKE"
                 #!/usr/bin/env bash
                 node -v
-                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$SMOKE_TAG"
+                # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$SMOKE"
           title: Detox Build & Test
           is_always_run: false
       # - custom-test-results-export@1:
