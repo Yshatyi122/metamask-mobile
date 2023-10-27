@@ -93,12 +93,26 @@ stages:
   run_e2e_ios_stage:
     workflows:
       - ios_e2e_test: {}
-  run_smoke_e2e_ios_android_stage:
+  run_regression_e2e_ios_android_stage:
+     steps:
+      - script@1:
+          inputs: 
+          ## Adding Regression env here
+            - content: |-
+                #!/usr/bin/env bash
+                envman add --key REGRESSION --value regression
     workflows:
       - ios_e2e_test: {}
       - android_e2e_test: {}
-  run_regression_e2e_ios_android_stage:
-    workflows:
+  run_smoke_e2e_ios_android_stage:
+   steps:
+      - script@1:
+          inputs: 
+          ## Adding Smoke env here
+            - content: |-
+                #!/usr/bin/env bash
+                envman add --key SMOKE --value smoke 
+   workflows:
       - ios_e2e_test: {}
       - android_e2e_test: {}
   run_e2e_ios_android_stage:
@@ -115,7 +129,6 @@ stages:
     workflows:
       - release_announcing_stores: {}
 workflows:
-  # Code Setups
   setup:
     steps:
       - activate-ssh-key@4:
@@ -134,8 +147,6 @@ workflows:
             - content: |-
                 #!/usr/bin/env bash
                 envman add --key YARN_CACHE_DIR --value "$(yarn cache dir)"
-                envman add --key SMOKE --value smoke 
-                envman add --key REGRESSION --value regression 
           title: Get Yarn cache directory
       - cache-pull@2: {}
       - yarn@0:
@@ -295,8 +306,6 @@ workflows:
           inputs:
           - content: |-
               #!/usr/bin/env bash
-              envman add --key SMOKE --value smoke
-              envman add --key REGRESSION --value regression 
       - yarn@:
           inputs:
             - cache_local_deps: 'yes'
@@ -375,7 +384,7 @@ workflows:
     envs:
     before_run:
       # - code_setup_dev
-      - e2e_setup
+      # - e2e_setup
     # after_run:
     #   - _notify_failure_on_slack
     steps:
