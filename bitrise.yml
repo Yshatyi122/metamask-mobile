@@ -291,13 +291,16 @@ workflows:
   # E2E Steps
   e2e_setup:
     steps:
+      - script@1:
+          inputs:
+          - content: |-
+              #!/usr/bin/env bash
+              envman add --key SMOKE --value smoke
+              envman add --key REGRESSION --value regression 
       - yarn@:
           inputs:
             - cache_local_deps: 'yes'
             - command: global add detox-cli
-            - content: |-
-              envman add --key SMOKE --value smoke
-              envman add --key REGRESSION --value regression 
           title: Detox - Install CLI
   android_e2e_test:
     before_run:
