@@ -387,13 +387,12 @@ workflows:
         title: Fetch tags
         inputs:
           - content: |-
-              envman add --key REGRESSION --value "true" 
+              envman add --key REGRESSION --value Regression
     - share-pipeline-variable@1:
         inputs:
           - variables: REGRESSION_TAG=$REGRESSION
   ios_e2e_test:
     envs:
-    - TEST_TAG2: $TEST_TAG
     # before_run:
     #   - code_setup_dev
     #   - e2e_setup
@@ -419,7 +418,7 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR regression tag: $SMOKE_TAG"
+                echo "THIS IS OUR regression tag: $REGRESSION"
                 # echo "THIS IS OUR smoke: $SMOKE_TAG"
                 #!/usr/bin/env bash
                 node -v
@@ -860,12 +859,7 @@ app:
     - opts:
         is_expand: false
       IOS_APP_LINK: ''
-    - opts:
-        is_expand: false
-      SMOKE: smoke
-    - opts:
-        is_expand: false
-      REGRESSION: Regression
+
 meta:
   bitrise.io:
     stack: osx-xcode-14.2.x-ventura
