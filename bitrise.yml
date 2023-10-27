@@ -49,14 +49,12 @@ pipelines:
     # Run regression tests pipeline (build ios & android), run Android, iOS Regression tests
   run_regression_e2e_pipeline:
     stages:
-      - regression_tag_stage: {} 
       - run_regression_e2e_ios_android_stage: {}
       - notify: {} 
   
   #PR_e2e_verfication (build ios & android), run Android, iOS Smoke tests
   pr_smoke_e2e_pipeline:
     stages:
-      - smoke_tag_stage: {} 
       - run_smoke_e2e_ios_android_stage: {}
       - notify: {}
 
@@ -116,13 +114,6 @@ stages:
   release_notify:
     workflows:
       - release_announcing_stores: {}
-  ## Gets the tags: Regression, Smoke that we would like to use in the respective pipeline
-  smoke_tag_stage:
-    workflows:
-      - smoke_tag_workflow: {}
-  regression_tag_stage:
-    workflows:
-     - regression_tag_workflow: {}
 workflows:
   # Code Setups
   setup:
@@ -138,10 +129,13 @@ workflows:
       - setup
     steps:
       - script@1:
-          inputs:
+          inputs: 
+          ## Setting up env variables. Adding Smoke, Regression env here as well
             - content: |-
                 #!/usr/bin/env bash
                 envman add --key YARN_CACHE_DIR --value "$(yarn cache dir)"
+                envman add --key SMOKE --value smoke 
+                envman add --key REGRESSION --value regression 
           title: Get Yarn cache directory
       - cache-pull@2: {}
       - yarn@0:
@@ -371,26 +365,6 @@ workflows:
       bitrise.io:
         stack: linux-docker-android-20.04
         machine_type_id: elite-xl
-  smoke_tag_workflow:
-    steps:
-    - script@1:
-        title: Fetch tags
-        inputs:
-          - content: |-
-              envman add --key SMOKE --value smoke
-    # - share-pipeline-variable@1:
-    #     inputs:
-    #       - variables: SMOKE_TAG=$SMOKE
-  regression_tag_workflow: 
-    steps:
-    - script@1:
-        title: Fetch tags
-        inputs:
-          - content: |-
-              envman add --key REGRESSION --value Regression
-    # - share-pipeline-variable@1:
-    #     inputs:
-    #       - variables: REGRESSION_TAG=$REGRESSION
   ios_e2e_test:
     envs:
     # before_run:
