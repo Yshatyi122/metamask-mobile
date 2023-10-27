@@ -94,24 +94,10 @@ stages:
     workflows:
       - ios_e2e_test: {}
   run_regression_e2e_ios_android_stage:
-    steps:
-      - script@1:
-          inputs: 
-          ## Adding Smoke env here
-            - content: |-
-                #!/usr/bin/env bash
-                envman add --key REGRESSION --value regression
     workflows:
       - ios_e2e_test: {}
       - android_e2e_test: {}
   run_smoke_e2e_ios_android_stage:
-   steps:
-      - script@1:
-          inputs: 
-          ## Adding Smoke env here
-            - content: |-
-                #!/usr/bin/env bash
-                envman add --key SMOKE --value smoke
    workflows:
       - ios_e2e_test: {}
       - android_e2e_test: {}
@@ -306,11 +292,13 @@ workflows:
           inputs:
           - content: |-
               #!/usr/bin/env bash
-      - yarn@:
-          inputs:
-            - cache_local_deps: 'yes'
-            - command: global add detox-cli
-          title: Detox - Install CLI
+              # envman add --key SMOKE --value smoke
+              # envman add --key REGRESSION --value regression 
+      # - yarn@:
+      #     inputs:
+      #       - cache_local_deps: 'yes'
+      #       - command: global add detox-cli
+      #     title: Detox - Install CLI
   android_e2e_test:
     before_run:
       - code_setup_dev
