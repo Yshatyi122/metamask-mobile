@@ -397,7 +397,8 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR TAG $TEST_TAG2"
+                echo "THIS IS OUR original TAG: $TEST_TAG"
+                echo "THIS IS OUR TAG2: $TEST_TAG2"
                 #!/usr/bin/env bash
                 node -v
                 # IGNORE_BOXLOGS_DEVELOPMENT="true" FORCE_BUNDLING=true yarn test:e2e:ios:debug --testNamePattern="$TEST_TAG"
