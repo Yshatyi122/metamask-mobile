@@ -418,7 +418,7 @@ workflows:
       - script@1:
           inputs:
             - content: |-
-                echo "THIS IS OUR regression tag: $REGRESSION_TAG"
+                echo "THIS IS OUR regression tag: $SMOKE_TAG"
                 # echo "THIS IS OUR smoke: $SMOKE_TAG"
                 #!/usr/bin/env bash
                 node -v
