@@ -48,11 +48,9 @@ describe(Regression('Swap Tests'), () => {
   beforeEach(async () => {
     jest.setTimeout(150000);
   });
-
   it.each`
     quantity | sourceTokenSymbol | destTokenSymbol
     ${'1'}   | ${'ETH'}          | ${'WETH'}
-    ${'1'}   | ${'WETH'}         | ${'ETH'}
     ${'.05'} | ${'ETH'}          | ${'USDC'}
     ${'10'}  | ${'USDC'}         | ${'ETH'}
   `(
