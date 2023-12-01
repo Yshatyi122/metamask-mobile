@@ -74,7 +74,7 @@ import {
   PermissionControllerState,
 } from '@metamask/permission-controller';
 import SwapsController, { swapsUtils } from '@metamask/swaps-controller';
-import { PPOMController, PPOMState } from '../lib/ppom/controller';
+import { PPOMController } from '../lib/ppom/controller/ppom-controller';
 import { MetaMaskKeyring as QRHardwareKeyring } from '@keystonehq/metamask-airgapped-keyring';
 import {
   LoggingController,
@@ -175,7 +175,7 @@ export interface EngineState {
   PermissionController: PermissionControllerState<Permissions>;
   ApprovalController: ApprovalControllerState;
   LoggingController: LoggingControllerState;
-  PPOMController: PPOMState;
+  PPOMController: any;
 }
 
 /**
