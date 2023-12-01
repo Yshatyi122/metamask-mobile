@@ -5,8 +5,7 @@ import {
 } from '../../components/UI/BlockaidBanner/BlockaidBanner.types';
 
 // eslint-disable-next-line import/prefer-default-export
-export const isBlockaidFeatureEnabled = () =>
-  process.env.MM_BLOCKAID_UI_ENABLED === 'true';
+export const isBlockaidFeatureEnabled = () => true;
 
 export const getBlockaidMetricsParams = (
   securityAlertResponse?: SecurityAlertResponse,
