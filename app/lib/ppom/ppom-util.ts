@@ -70,9 +70,11 @@ const validateRequest = async (req: any, transactionId?: string) => {
           setSignatureRequestSecurityAlertResponse(RequestInProgress),
         );
       }
+      console.log('----------------- before', new Date().getTime())
       securityAlertResponse = await ppomController.usePPOM((ppom: any) =>
         ppom.validateJsonRpc(req),
       );
+      console.log('----------------- after', new Date().getTime())
     }
   } catch (e) {
     Logger.log(`Error validating JSON RPC using PPOM: ${e}`);
