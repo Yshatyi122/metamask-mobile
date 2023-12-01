@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export declare const IdGenerator: () => number;
 export declare const createPayload: (method: string, params: Record<string, unknown>) => {
     id: number;

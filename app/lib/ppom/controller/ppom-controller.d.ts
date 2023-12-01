@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { BaseControllerV2, RestrictedControllerMessenger } from '@metamask/base-controller';
 import { StorageBackend, FileMetadataList, FileMetadata } from './ppom-storage';
 export declare const REFRESH_TIME_INTERVAL: number;

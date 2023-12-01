@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * @type FileMetadata
  * Defined type for information about file saved in storage backend.
