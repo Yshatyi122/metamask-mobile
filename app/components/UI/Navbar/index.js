@@ -42,16 +42,13 @@ import ButtonIcon, {
   ButtonIconSizes,
   ButtonIconVariants,
 } from '../../../component-library/components/Buttons/ButtonIcon';
-import Icon, {
+import {
   IconName,
   IconSize,
 } from '../../../component-library/components/Icons/Icon';
 import { EDIT_BUTTON } from '../../../../wdio/screen-objects/testIDs/Common.testIds';
+import Icon from '../../../component-library/components/Icons/Icon/Icon';
 import { SendLinkViewSelectorsIDs } from '../../../../e2e/selectors/SendLinkView.selectors';
-import {
-  default as MorphText,
-  TextVariant,
-} from '../../../component-library/components/Texts/Text';
 import { CommonSelectorsIDs } from '../../../../e2e/selectors/Common.selectors';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/WalletView.selectors';
 
@@ -190,13 +187,18 @@ export function getNavigationOptionsTitle(
   navigationPopEvent = undefined,
 ) {
   const innerStyles = StyleSheet.create({
+    headerTitleStyle: {
+      fontSize: 20,
+      color: themeColors.text.default,
+      ...fontStyles.normal,
+    },
+    headerIcon: {
+      color: themeColors.text.default,
+    },
     headerStyle: {
       backgroundColor: themeColors.background.default,
       shadowColor: importedColors.transparent,
       elevation: 0,
-    },
-    accessories: {
-      marginHorizontal: 16,
     },
   });
 
@@ -207,29 +209,34 @@ export function getNavigationOptionsTitle(
 
   return {
     title,
-    headerTitle: <MorphText variant={TextVariant.HeadingMD}>{title}</MorphText>,
+    headerTitleStyle: innerStyles.headerTitleStyle,
     headerRight: () =>
       isFullScreenModal ? (
-        <ButtonIcon
-          size={ButtonIconSizes.Lg}
-          iconName={IconName.Close}
-          onPress={navigationPop}
-          style={innerStyles.accessories}
-          {...generateTestId(Platform, NETWORK_SCREEN_CLOSE_ICON)}
-        />
+        <TouchableOpacity onPress={navigationPop} style={styles.closeButton}>
+          <IonicIcon
+            name={'ios-close'}
+            size={38}
+            style={[innerStyles.headerIcon, styles.backIconIOS]}
+            {...generateTestId(Platform, NETWORK_SCREEN_CLOSE_ICON)}
+          />
+        </TouchableOpacity>
       ) : null,
     headerLeft: () =>
       isFullScreenModal ? null : (
-        <ButtonIcon
-          size={ButtonIconSizes.Lg}
-          iconName={IconName.ArrowLeft}
+        <TouchableOpacity
           onPress={navigationPop}
-          style={innerStyles.accessories}
+          style={styles.backButton}
           {...generateTestId(Platform, NETWORK_BACK_ARROW_BUTTON_ID)}
-        />
+        >
+          <IonicIcon
+            name={Device.isAndroid() ? 'md-arrow-back' : 'ios-arrow-back'}
+            size={Device.isAndroid() ? 24 : 28}
+            style={innerStyles.headerIcon}
+          />
+        </TouchableOpacity>
       ),
+    headerStyle: innerStyles.headerStyle,
     headerTintColor: themeColors.primary.default,
-    ...innerStyles,
   };
 }
 
