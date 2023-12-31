@@ -1,3 +1,4 @@
+[sha512sums.txt](https://github.com/MetaMask/metamask-mobile/files/13802368/sha512sums.txt)
 ![MetaMask logo](logo.png?raw=true)
 
 # MetaMask
