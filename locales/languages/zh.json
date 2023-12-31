@@ -17,7 +17,20 @@
     "does_not_look_right": "有什么不对劲吗？",
     "suspicious_request_title": "此请求很可疑",
     "trade_order_farming_description": "如果您批准此请求，可能会遭受资产损失。",
-    "transfer_farming_description": "如果您批准此请求，因欺诈而恶名昭彰的第三方会拿走您的所有资产。"
+    "transfer_farming_description": "如果您批准此请求，因欺诈而恶名昭彰的第三方会拿走您的所有资产。",
+    "before_you_proceed": "继续之前",
+    "enable_blockaid_alerts": "要启用此功能，我们需要设置一些安全提醒。此页面在设置过程中需要保持打开状态。此操作需要不到一分钟即可完成。",
+    "setting_up_alerts": "设置安全提醒",
+    "setting_up_alerts_description": "我们正以最快速度设置安全提醒。请稍候，很快即将完成。",
+    "setup_complete": "设置完成",
+    "setup_failed": "我们无法完成安全提醒的设置。请检查您的互联网连接，然后重试。",
+    "setup_multiple_failures": "您的互联网连接目前不稳定，因此我们无法设置安全提醒。请在恢复连接后重试。",
+    "setup_complete_description": "安全提醒已准备就绪。您可以关闭此页面并开始浏览您的钱包",
+    "continue": "继续",
+    "cancel": "取消",
+    "got_it": "知道了",
+    "try_again": "请重试",
+    "failed": "出错了"
   },
   "date": {
     "months": {
@@ -521,7 +534,6 @@
     "import_account": "导入账户",
     "connect_hardware": "连接硬件钱包",
     "imported": "已导入",
-    "qr_hardware": "QR 硬件",
     "remove_account_title": "删除账户",
     "remove_account_message": "是否确实想要删除此账户？",
     "no": "否",
@@ -575,7 +587,7 @@
     "tutorial": "教程",
     "description4": "Keystone（教程）",
     "description5": "1. 解锁您的Keystone",
-    "description6": "2. Tap the ··· Menu, then go to Sync",
+    "description6": "2. 点击 … 菜单，然后进入同步",
     "button_continue": "继续",
     "hint_text": "扫描您的Keystone钱包以",
     "purpose_connect": "连接",
@@ -608,9 +620,9 @@
     "autolock_after_minutes": "{{time}} 分钟后",
     "reveal_seed_words": "显示助记词",
     "reset_account": "重置账户",
-    "state_logs_button": "下载状态日志",
+    "state_logs_button": "下载状态记录",
     "reveal_seed_words_button": "显示助记词",
-    "reset_account_button": "重置账户",
+    "reset_account_button": "重设账户",
     "reset_account_confirm_button": "是，重置",
     "reset_account_cancel_button": "取消",
     "reset_account_modal_title": "重置账户？",
@@ -664,8 +676,8 @@
     "toggleEthSignModalTitle": "使用风险自负",
     "toggleEthSignModalEnable": "启用",
     "toggleEthSignModalLearnMore": "了解更多。",
-    "toggleEthSignOff": "关闭（推荐）",
-    "toggleEthSignOn": "开启（不推荐）",
+    "toggleEthSignOff": "（建议）",
+    "toggleEthSignOn": "（不建议）",
     "toggleEthSignContinueButton": "继续",
     "toggleEthSignEnableButton": "启用",
     "show_custom_nonce": "自定义交易 nonce",
@@ -853,7 +865,12 @@
           "snap_dialog": "显示自定义对话"
         }
       }
-    }
+    },
+    "privacy_browser_subheading": "清除隐私或浏览器数据",
+    "analytics_subheading": "分析",
+    "transactions_subheading": "交易",
+    "token_nft_ens_subheading": "代币、NFT 和 ENS（Ethereum 域名服务）自动检测",
+    "security_check_subheading": "安全检查"
   },
   "sdk": {
     "disconnect_title": "要断开所有网站的连接吗?",
@@ -2117,7 +2134,15 @@
       "purchase_completed_title": "您已成功购买 {{amount}} {{currency}}！",
       "purchase_completed_description": "您的 {{currency}} 现在可用",
       "purchase_pending_title": "正在处理您的 {{currency}} 购买",
-      "purchase_pending_description": "您的存款正在进行"
+      "purchase_pending_description": "应该只需几分钟…",
+      "sale_failed_title": "订单下达失败",
+      "sale_failed_description": "您的订单无法完成。",
+      "sale_cancelled_title": "订单已取消",
+      "sale_cancelled_description": "您的订单无法完成。",
+      "sale_completed_title": "订单已完成",
+      "sale_completed_description": "您的订单已成功！",
+      "sale_pending_title": "正在处理{{currency}}的卖出",
+      "sale_pending_description": "您的订单正在处理中。"
     }
   },
   "swaps": {
@@ -2741,5 +2766,17 @@
     "ipfs_gateway_content2": "您可以随时在",
     "ipfs_gateway_content3": "“设置 > 安全和隐私”中",
     "ipfs_gateway_content4": "关闭 IPFS 解析"
+  },
+  "install_snap": {
+    "title": "连接请求",
+    "description": "{{origin}}想要下载并连接{{snap}}。继续之前，请确保您信任作者。",
+    "permissions_request_title": "许可请求",
+    "permissions_request_description": "{{origin}}想要安装{{snap}}，这是在请求以下许可。",
+    "approve_permissions": "批准",
+    "installed": "已安装",
+    "install_successful": "{{snap}}已成功安装。",
+    "okay_action": "确定",
+    "error_title": "安装失败",
+    "error_description": "{{snap}}安装失败。"
   }
 }
